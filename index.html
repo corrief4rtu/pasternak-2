@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title>Засади все поле пастернаком!</title>
+<style>
+    body {
+        background-color: lavender;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        font-family: Arial, sans-serif;
+        overflow: hidden; /* Препятствует прокрутке страницы при анимации */
+    }
+    h1 {
+        margin-top: 20px;
+    }
+    #garden {
+        display: grid;
+        grid-template-columns: repeat(5, 50px);
+        grid-template-rows: repeat(5, 50px);
+        gap: 5px;
+        margin: 20px;
+    }
+    .plot {
+        width: 50px;
+        height: 50px;
+        background-color: white;
+        border: 2px solid grey;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 24px;
+    }
+    #message {
+        margin-top: 20px;
+        font-size: 24px;
+        display: none;
+    }
+    .gradient-text {
+        background: linear-gradient(45deg, violet, red, blue, green, yellow);
+        -webkit-background-clip: text;
+        color: transparent;
+        font-size: 32px;
+        font-weight: bold;
+    }
+    .crown {
+        position: absolute;
+        bottom: -100px; /* Начинаем анимацию ниже видимой области */
+        font-size: 72px; /* Увеличенный размер смайлика */
+        animation: floatUp infinite linear; /* Бесконечная анимация */
+    }
+    @keyframes floatUp {
+        from { bottom: -100px; opacity: 1; }
+        to { bottom: 100%; opacity: 0; }
+    }
+</style>
+</head>
+<body>
+<h1>Засади все поле пастернаком!</h1>
+<div id="garden"></div>
+<div id="message">Спокойной ночи, <span class="gradient-text">принцесса</span>!</div>
+
+<script>
+    function plantFlower() {
+        if (!this.textContent) {
+            this.textContent = '🌺';
+            checkCompletion();
+        }
+    }
+
+    function checkCompletion() {
+        const plots = document.querySelectorAll('.plot');
+        const planted = Array.from(plots).every(plot => plot.textContent === '🌺');
+        if (planted) {
+            document.getElementById('message').style.display = 'block';
+            releaseCrowns();
+        }
+    }
+
+    function releaseCrowns() {
+        for (let i = 0; i < 10; i++) {
+            const crown = document.createElement('div');
+            crown.classList.add('crown');
+            crown.textContent = '👑';
+            crown.style.left = `${Math.random() * 100}%`; // Случайное расположение по ширине
+            crown.style.animationDuration = `${Math.random() * 5 + 5}s`; // Случайная длительность анимации от 5 до 10 секунд
+            crown.style.animationDelay = `${Math.random() * 3}s`; // Случайная задержка начала анимации
+            document.body.appendChild(crown);
+        }
+    }
+
+    const garden = document.getElementById('garden');
+    for (let i = 0; i < 25; i++) {
+        const plot = document.createElement('div');
+        plot.className = 'plot';
+        plot.addEventListener('click', plantFlower);
+        garden.appendChild(plot);
+    }
+</script>
+</body>
+</html>
